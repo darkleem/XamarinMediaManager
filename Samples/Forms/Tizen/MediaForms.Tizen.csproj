@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Property Group for Tizen40 Project -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>tizen40</TargetFramework>
+    <GenerateDependencyFile>false</GenerateDependencyFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>None</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="lib\" />
+    <Folder Include="res\" />
+  </ItemGroup>
+
+
+  <!-- If solution already has PCL project, will reference -->
+
+  <!-- Include Nuget Package for Tizen Project building -->
+  <ItemGroup>
+    <PackageReference Include="Tizen.NET" Version="4.0.0">
+      <ExcludeAssets>Runtime</ExcludeAssets>
+    </PackageReference>
+    <PackageReference Include="Tizen.NET.Sdk" Version="1.0.0" />
+    <PackageReference Include="Xamarin.Forms.Platform.Tizen" Version="2.4.0.18342" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\MediaManager.Abstractions\Plugin.MediaManager.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\MediaManager.Forms\MediaManager.Forms.TIzen\Plugin.MediaManager.Forms.TIzen.csproj" />
+    <ProjectReference Include="..\..\..\MediaManager.Forms\MediaManager.Forms\Plugin.MediaManager.Forms.csproj" />
+    <ProjectReference Include="..\..\..\MediaManager.Tizen\Plugin.MediaManager.Tizen.csproj" />
+    <ProjectReference Include="..\MediaForms\MediaForms.csproj" />
+  </ItemGroup>
+</Project>
