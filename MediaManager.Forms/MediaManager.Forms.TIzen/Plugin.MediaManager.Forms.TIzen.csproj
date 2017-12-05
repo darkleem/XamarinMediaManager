@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>tizen40</TargetFramework>
+    <GenerateDependencyFile>False</GenerateDependencyFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Tizen.NET" Version="4.0.0">
+      <ExcludeAssets>Runtime</ExcludeAssets>
+    </PackageReference>
+    <PackageReference Include="Xamarin.Forms.Platform.Tizen" Version="2.4.0.18342" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\MediaManager.Tizen\Plugin.MediaManager.Tizen.csproj" />
+    <ProjectReference Include="..\MediaManager.Forms\Plugin.MediaManager.Forms.csproj" />
+  </ItemGroup>
+
+</Project>

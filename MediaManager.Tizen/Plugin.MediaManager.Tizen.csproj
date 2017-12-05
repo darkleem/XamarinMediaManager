@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Property Group for Tizen Project -->
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Plugin.MediaManager</AssemblyName>
+    <RootNamespace>Plugin.MediaManager</RootNamespace>
+    <PackageId>Plugin.MediaManager</PackageId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\MediaManager\CrossMediaManager.cs">
+      <Link>CrossMediaManager.cs</Link>
+    </Compile>
+  </ItemGroup>
+
+  <!-- Include Nuget Package for Tizen Project building -->
+  <ItemGroup>
+    <PackageReference Include="Tizen.NET" Version="4.0.0">
+      <ExcludeAssets>Runtime</ExcludeAssets>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MediaManager.Abstractions\Plugin.MediaManager.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>
