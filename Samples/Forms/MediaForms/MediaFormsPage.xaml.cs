@@ -25,17 +25,18 @@ namespace MediaForms
                     ProgressBar.Progress = e.Progress;
                     Duration.Text = "" + e.Duration.TotalSeconds + " seconds";
                 });
-            };            
+            };
         }
 
         protected override void OnAppearing()
         {
-            videoView.Source = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+            //videoView.Source = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
         }
 
         void PlayClicked(object sender, System.EventArgs e)
-        {            
-            PlaybackController.Play();
+        {
+            //PlaybackController.Play();
+            CrossMediaManager.Current.Play("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4", Plugin.MediaManager.Abstractions.Enums.MediaFileType.Video);
         }
 
         void PauseClicked(object sender, System.EventArgs e)

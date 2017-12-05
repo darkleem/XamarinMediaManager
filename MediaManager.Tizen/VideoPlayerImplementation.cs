@@ -3,6 +3,7 @@ using ElmSharp;
 using Plugin.MediaManager.Abstractions;
 using Plugin.MediaManager.Abstractions.Enums;
 using Tizen.Multimedia;
+using System.Diagnostics;
 
 namespace Plugin.MediaManager
 {
@@ -29,7 +30,7 @@ namespace Plugin.MediaManager
 
         public VideoAspectMode AspectMode { get; set; }
 
-        public bool IsReadyRendering => RenderSurface != null && !RenderSurface.IsDisposed;
+        public bool IsReadyRendering =>  RenderSurface != null && !RenderSurface.IsDisposed;
 
         public bool IsMuted
         {
@@ -45,8 +46,15 @@ namespace Plugin.MediaManager
 
         protected override void PlayerInitialize()
         {
+            Debug.WriteLine($"@@@@@@@@@ PlayerInitialize 1");
             if (Player.State != PlayerState.Idle)
+            {
+                Debug.WriteLine($"@@@@@@@@@ PlayerInitialize 1.1 IF");
+
                 Player.Unprepare();
+            }
+
+            Debug.WriteLine($"@@@@@@@@@ PlayerInitialize 2");
 
             if (RenderSurface is MediaView mediaView)
             {
@@ -69,6 +77,7 @@ namespace Plugin.MediaManager
                 else
                 {
                     Player.Display = new Display(mediaView);
+                    Debug.WriteLine($"@@@@@@@@@ PlayerInitialize mobile display set");
                 }
             }
             else

@@ -4,6 +4,7 @@ using Plugin.MediaManager.Forms;
 using Plugin.MediaManager.Forms.Tizen;
 using Xamarin.Forms.Platform.Tizen;
 using TForms = Xamarin.Forms.Platform.Tizen.Forms;
+using System.Diagnostics;
 
 [assembly: ExportRenderer(typeof(VideoView), typeof(VideoViewRenderer))]
 namespace Plugin.MediaManager.Forms.Tizen
@@ -26,6 +27,7 @@ namespace Plugin.MediaManager.Forms.Tizen
                 var _videoSurface = new VideoSurface(TForms.Context.MainWindow);
                 SetNativeControl(_videoSurface);
 
+                Debug.WriteLine($"@@@@@@@ testtest 1235");
                 CrossMediaManager.Current.VideoPlayer.AspectMode = (VideoAspectMode.AspectFill);
                 CrossMediaManager.Current.VideoPlayer.RenderSurface = _videoSurface;
             }

@@ -3,6 +3,10 @@ using ElmSharp;
 using Plugin.MediaManager;
 using System.Diagnostics;
 using System;
+using Plugin.MediaManager.Abstractions.EventArguments;
+using Plugin.MediaManager.Abstractions.Implementations;
+using Plugin.MediaManager.Abstractions.Enums;
+using Tizen.Multimedia;
 
 namespace MediaSample.Tizen
 {
@@ -16,11 +20,15 @@ namespace MediaSample.Tizen
             base.OnCreate();
             Initialize();
 
-            CrossMediaManager.Current.PlayingChanged += OnPlayingChanged;
-            CrossMediaManager.Current.BufferingChanged += OnBufferingChanged;
-            CrossMediaManager.Current.StatusChanged += OnStatusChanged;
-            CrossMediaManager.Current.VideoPlayer.RenderSurface = VideoCanvas;
-            CrossMediaManager.Current.MediaFileChanged += CurrentOnMediaFileChanged;
+            //TestPlayer = new Player
+            //{
+            //    Display = new Display(MediaSurface)
+            //};
+            //var t = new MediaUriSource($"{App.Current.DirectoryInfo.Resource}a.mp4");
+            //Debug.WriteLine($"@@@@@@@@@@ {t.Uri}");
+            //TestPlayer.SetSource(t);
+            //TestPlayer.DisplaySettings.Mode = PlayerDisplayMode.CroppedFull;
+            //TestPlayer.PrepareAsync();
         }
 
         private void OnBufferingChanged(object sender, BufferingChangedEventArgs bufferingChangedEventArgs)
@@ -33,15 +41,15 @@ namespace MediaSample.Tizen
         private void CurrentOnMediaFileChanged(object sender, MediaFileChangedEventArgs mediaFileChangedEventArgs)
         {
             var mediaFile = mediaFileChangedEventArgs.File;
-            Title.Text = mediaFile.Metadata.Title ?? "";
-            Artist.Text = mediaFile.Metadata.Artist ?? "";
-            Album.Text = mediaFile.Metadata.Album ?? "";
+            TitleLabel.Text = mediaFile.Metadata.Title ?? "";
+            ArtistLabel.Text = mediaFile.Metadata.Artist ?? "";
+            AlbumLabel.Text = mediaFile.Metadata.Album ?? "";
             switch (mediaFile.Type)
             {
                 case MediaFileType.Audio:
                     if (mediaFile.Metadata.AlbumArt != null)
                     {
-                        CoverArt.Source = (ImageSource)mediaFile.Metadata.AlbumArt;
+                        //CoverArt.Source = (ImageSource)mediaFile.Metadata.AlbumArt;
                     }
                     break;
                 case MediaFileType.Video:
@@ -51,59 +59,57 @@ namespace MediaSample.Tizen
 
         private async void OnStatusChanged(object sender, StatusChangedEventArgs e)
         {
-            await
-                CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-                    () =>
-                    {
-                        PlayerState.Text = Enum.GetName(typeof(MediaPlayerStatus), e.Status);
-                        switch (CrossMediaManager.Current.Status)
-                        {
-                            case MediaPlayerStatus.Stopped:
-                                Progress.Value = 0;
-                                break;
-                            case MediaPlayerStatus.Paused:
-                                break;
-                            case MediaPlayerStatus.Playing:
-                                Progress.Maximum = 1;
-                                break;
-                            case MediaPlayerStatus.Buffering:
-                                break;
-                            case MediaPlayerStatus.Loading:
-                                break;
-                            case MediaPlayerStatus.Failed:
-                                break;
-                            default:
-                                throw new ArgumentOutOfRangeException();
-                        }
-                    });
+            StateLabel.Text = Enum.GetName(typeof(MediaPlayerStatus), e.Status);
+            switch (CrossMediaManager.Current.Status)
+            {
+                case MediaPlayerStatus.Stopped:
+                    //Progress.Value = 0;
+                    break;
+                case MediaPlayerStatus.Paused:
+                    break;
+                case MediaPlayerStatus.Playing:
+                    //Progress.Maximum = 1;
+                    break;
+                case MediaPlayerStatus.Buffering:
+                    break;
+                case MediaPlayerStatus.Loading:
+                    break;
+                case MediaPlayerStatus.Failed:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         private double CurrentStreamingPosition = 0;
         private async void OnPlayingChanged(object sender, PlayingChangedEventArgs e)
         {
-            await
-                CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-                    () =>
-                    {
-                        Progress.Value = e.Progress;
-                        CurrentStreamingPosition = e.Position.TotalSeconds;
-                    });
+
         }
 
         private MediaFile mediaFile;
-        private async void PlayUrl(object sender, RoutedEventArgs e)
+        private VideoSurface MediaSurface;
+        private Player TestPlayer;
+
+        private void PlayUrl(object sender, EventArgs e)
         {
             if (mediaFile == null)
             {
-                mediaFile = new MediaFile("http://www.montemagno.com/sample.mp3", MediaFileType.Audio);
+                mediaFile = new MediaFile("https://www.android-examples.com/wp-content/uploads/2016/04/Thunder-rumble.mp3", MediaFileType.Audio);
             }
             //await CrossMediaManager.Current.Play(mediaFile);
             //var file = await KnownFolders.VideosLibrary.GetFileAsync("big_buck_bunny.mp4");
             //await CrossMediaManager.Current.Play(file.Path, MediaFileType.VideoFile);
-            await CrossMediaManager.Current.Play(@"http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4", MediaFileType.Video);
+            Debug.WriteLine($"@@@@@@@@@ play media");
+
+            CrossMediaManager.Current.VideoPlayer.RenderSurface = MediaSurface;
+            //TestPlayer.Start();
+            CrossMediaManager.Current.Play($"{App.Current.DirectoryInfo.Resource}a.mp4", MediaFileType.Video);
+            Debug.WriteLine($"@@@@@@@@@ play media end");
+
         }
 
-        private async void Pause(object sender, RoutedEventArgs e)
+        private async void Pause(object sender, EventArgs e)
         {
             await CrossMediaManager.Current.Pause();
         }
@@ -168,14 +174,14 @@ namespace MediaSample.Tizen
             rootBox.Show();
             bg.SetContent(rootBox);
 
-            var mediaSurface = new VideoSurface(window)
+            MediaSurface = new VideoSurface(window)
             {
                 AlignmentX = -1,
                 AlignmentY = -1,
                 WeightX = 1,
                 WeightY = 1,
             };
-            mediaSurface.Show();
+            MediaSurface.Show();
 
             var titleBox = CreateHorizontalBoxInLabel(window, "Title : ");
             TitleLabel = new Label(window)
@@ -232,31 +238,33 @@ namespace MediaSample.Tizen
             PlayButton = new Button(window)
             {
                 Text = "Play",
-                MinimumWidth = 200,
+                MinimumWidth = 150,
             };
             PlayButton.Show();
+            PlayButton.Clicked += PlayUrl;
+
             PauseButton = new Button(window)
             {
                 Text = "Pause",
-                MinimumWidth = 200,
+                MinimumWidth = 150,
             };
             PauseButton.Show();
             StopButton = new Button(window)
             {
                 Text = "Stop",
-                MinimumWidth = 200,
+                MinimumWidth = 150,
             };
             StopButton.Show();
             SkipPlusButton = new Button(window)
             {
                 Text = "Skip+10",
-                MinimumWidth = 200,
+                MinimumWidth = 150,
             };
             SkipPlusButton.Show();
             SkipMinusButton = new Button(window)
             {
                 Text = "Skip-10",
-                MinimumWidth = 200,
+                MinimumWidth = 150,
             };
             SkipMinusButton.Show();
             buttonBox.PackEnd(PlayButton);
@@ -266,15 +274,13 @@ namespace MediaSample.Tizen
             buttonBox.PackEnd(SkipMinusButton);
 
 
-            rootBox.PackEnd(mediaSurface);
+            rootBox.PackEnd(MediaSurface);
             rootBox.PackEnd(titleBox);
             rootBox.PackEnd(artistBox);
             rootBox.PackEnd(albumBox);
             rootBox.PackEnd(stateBox);
             rootBox.PackEnd(progress);
             rootBox.PackEnd(buttonBox);
-
-            CrossMediaManager.Current.VideoPlayer.RenderSurface = mediaSurface;
         }
 
         Box CreateHorizontalBoxInLabel(EvasObject parent, string text)
@@ -283,7 +289,6 @@ namespace MediaSample.Tizen
             {
                 IsHorizontal = true,
             };
-            box.Resize(500, 100);
             box.Show();
             var label = new Label(box)
             {

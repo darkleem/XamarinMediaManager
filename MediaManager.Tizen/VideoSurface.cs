@@ -5,44 +5,46 @@ using Tizen.Multimedia;
 
 namespace Plugin.MediaManager
 {
-    public class VideoSurface : MediaView, IVideoSurface, IDisposable
+    public class VideoSurface : MediaView, IVideoSurface
     {
         public VideoSurface(EvasObject parent) : base(parent)
         {
         }
 
-        #region IDisposable
-        public bool IsDisposed => disposed;
+        public bool IsDisposed => false;
 
-        // Flag: Has Dispose already been called?
-        bool disposed = false;
+        //#region IDisposable
+        //public bool IsDisposed => disposed;
 
-        // Public implementation of Dispose pattern callable by consumers.
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+        //// Flag: Has Dispose already been called?
+        //bool disposed = false;
 
-        // Protected implementation of Dispose pattern.
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposed)
-                return;
+        //// Public implementation of Dispose pattern callable by consumers.
+        //public void Dispose()
+        //{
+        //    Dispose(true);
+        //    GC.SuppressFinalize(this);
+        //}
 
-            if (disposing)
-            {
-                // Free any other managed objects here.
-            }
+        //// Protected implementation of Dispose pattern.
+        //protected virtual void Dispose(bool disposing)
+        //{
+        //    if (disposed)
+        //        return;
 
-            // Free any unmanaged objects here.
-            disposed = true;
-        }
+        //    if (disposing)
+        //    {
+        //        // Free any other managed objects here.
+        //    }
 
-        ~VideoSurface()
-        {
-            Dispose(false);
-        }
-        #endregion
+        //    // Free any unmanaged objects here.
+        //    disposed = true;
+        //}
+
+        //~VideoSurface()
+        //{
+        //    Dispose(false);
+        //}
+        //#endregion
     }
 }
