@@ -21,7 +21,6 @@ namespace Plugin.MediaManager.Forms.Tizen
 
         protected override void OnElementChanged(ElementChangedEventArgs<VideoView> e)
         {
-            base.OnElementChanged(e);
             if (Control == null)
             {
                 var _videoSurface = new VideoSurface(TForms.Context.MainWindow);
@@ -31,6 +30,7 @@ namespace Plugin.MediaManager.Forms.Tizen
                 CrossMediaManager.Current.VideoPlayer.AspectMode = (VideoAspectMode.AspectFill);
                 CrossMediaManager.Current.VideoPlayer.RenderSurface = _videoSurface;
             }
+            base.OnElementChanged(e);
         }
     }
 }

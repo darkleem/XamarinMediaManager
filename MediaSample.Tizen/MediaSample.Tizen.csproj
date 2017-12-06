@@ -32,7 +32,6 @@
   <ItemGroup>
     <ProjectReference Include="..\MediaManager.Abstractions\Plugin.MediaManager.Abstractions.csproj" />
     <ProjectReference Include="..\MediaManager.Tizen\Plugin.MediaManager.Tizen.csproj" />
-    <ProjectReference Include="..\Samples\Simple\MediaSample.Core\MediaSample.Core.csproj" />
   </ItemGroup>
 
 </Project>

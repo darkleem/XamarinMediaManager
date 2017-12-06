@@ -50,7 +50,6 @@ namespace Plugin.MediaManager
             if (Player.State != PlayerState.Idle)
             {
                 Debug.WriteLine($"@@@@@@@@@ PlayerInitialize 1.1 IF");
-
                 Player.Unprepare();
             }
 
@@ -60,21 +59,22 @@ namespace Plugin.MediaManager
             {
                 // On TV profile, it only works when the Display object type is 'Window'.
                 // When creating ElmSharp.MediaView object, if the parent is not set to Window, this would not work properly.
-                if (Elementary.GetProfile() == "tv")
-                {
-                    if (mediaView.Parent is Window window)
-                    {
-                        Player.DisplaySettings.Mode = PlayerDisplayMode.Roi;
-                        if (mediaView.Geometry.Width != 0 && mediaView.Geometry.Height != 0)
-                            Player.DisplaySettings.SetRoi(new Tizen.Multimedia.Rectangle(mediaView.Geometry.X, mediaView.Geometry.Y, mediaView.Geometry.Width, mediaView.Geometry.Height));
-                        Player.Display = new Display(window);
-                    }
-                    else
-                    {
-                        throw new InvalidCastException("Only the Window object can be used in the TV Profile.");
-                    }
-                }
-                else
+                //if (Elementary.GetProfile() == "tv")
+                //{
+                //    if (mediaView.Parent is Window window)
+                //    {
+                //        Player.DisplaySettings.Mode = PlayerDisplayMode.Roi;
+                //        if (mediaView.Geometry.Width != 0 && mediaView.Geometry.Height != 0)
+                //            Player.DisplaySettings.SetRoi(new Tizen.Multimedia.Rectangle(mediaView.Geometry.X, mediaView.Geometry.Y, mediaView.Geometry.Width, mediaView.Geometry.Height));
+                //        Player.Display = new Display(window);
+                //        Debug.WriteLine($"@@@@@@@@@ PlayerInitialize mobile display set tv");
+                //    }
+                //    else
+                //    {
+                //        throw new InvalidCastException("Only the Window object can be used in the TV Profile.");
+                //    }
+                //}
+                //else
                 {
                     Player.Display = new Display(mediaView);
                     Debug.WriteLine($"@@@@@@@@@ PlayerInitialize mobile display set");

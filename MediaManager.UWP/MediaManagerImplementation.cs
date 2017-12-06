@@ -1,4 +1,4 @@
-﻿using Windows.Media;
+using Windows.Media;
 using Plugin.MediaManager.Abstractions;
 using Plugin.MediaManager.Abstractions.Implementations;
 using Plugin.MediaManager.SystemWrappers;
@@ -39,7 +39,7 @@ namespace Plugin.MediaManager
 
         public override IVolumeManager VolumeManager { get; set; } = new VolumeManagerImplementation();
 
-        #region IDisposable 
+        #region IDisposable
         bool disposed = false;
         protected override void Dispose(bool disposing)
         {
@@ -56,7 +56,7 @@ namespace Plugin.MediaManager
 
             // Free any unmanaged objects here.
             //
-            disposed = true;                  
+            disposed = true;
         }
         #endregion
     }

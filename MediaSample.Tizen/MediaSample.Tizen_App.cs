@@ -19,16 +19,6 @@ namespace MediaSample.Tizen
         {
             base.OnCreate();
             Initialize();
-
-            //TestPlayer = new Player
-            //{
-            //    Display = new Display(MediaSurface)
-            //};
-            //var t = new MediaUriSource($"{App.Current.DirectoryInfo.Resource}a.mp4");
-            //Debug.WriteLine($"@@@@@@@@@@ {t.Uri}");
-            //TestPlayer.SetSource(t);
-            //TestPlayer.DisplaySettings.Mode = PlayerDisplayMode.CroppedFull;
-            //TestPlayer.PrepareAsync();
         }
 
         private void OnBufferingChanged(object sender, BufferingChangedEventArgs bufferingChangedEventArgs)
@@ -82,14 +72,13 @@ namespace MediaSample.Tizen
         }
 
         private double CurrentStreamingPosition = 0;
-        private async void OnPlayingChanged(object sender, PlayingChangedEventArgs e)
+        private void OnPlayingChanged(object sender, PlayingChangedEventArgs e)
         {
 
         }
 
         private MediaFile mediaFile;
         private VideoSurface MediaSurface;
-        private Player TestPlayer;
 
         private void PlayUrl(object sender, EventArgs e)
         {
@@ -101,12 +90,9 @@ namespace MediaSample.Tizen
             //var file = await KnownFolders.VideosLibrary.GetFileAsync("big_buck_bunny.mp4");
             //await CrossMediaManager.Current.Play(file.Path, MediaFileType.VideoFile);
             Debug.WriteLine($"@@@@@@@@@ play media");
-
             CrossMediaManager.Current.VideoPlayer.RenderSurface = MediaSurface;
-            //TestPlayer.Start();
             CrossMediaManager.Current.Play($"{App.Current.DirectoryInfo.Resource}a.mp4", MediaFileType.Video);
             Debug.WriteLine($"@@@@@@@@@ play media end");
-
         }
 
         private async void Pause(object sender, EventArgs e)
@@ -164,6 +150,7 @@ namespace MediaSample.Tizen
             conformant.Show();
             conformant.SetContent(bg);
 
+            window.StatusBarMode = StatusBarMode.Transparent;
             var rootBox = new Box(window)
             {
                 AlignmentX = -1,
@@ -281,6 +268,12 @@ namespace MediaSample.Tizen
             rootBox.PackEnd(stateBox);
             rootBox.PackEnd(progress);
             rootBox.PackEnd(buttonBox);
+
+            //MediaSurface.Resized += (() =>
+            //{
+            //    MediaSurface.Resize(500, 500);
+            //    PlayUrl(null, null);
+            //});
         }
 
         Box CreateHorizontalBoxInLabel(EvasObject parent, string text)
