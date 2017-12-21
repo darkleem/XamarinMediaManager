@@ -13,6 +13,7 @@ namespace Plugin.MediaManager
 
         public VideoPlayerImplementation(IVolumeManager volumeManager) : base(volumeManager)
         {
+            Debug.WriteLine($"@@@@@@@@@@@@@ VideoPlayerImplementation ctor");
         }
 
         public IVideoSurface RenderSurface
@@ -24,13 +25,17 @@ namespace Plugin.MediaManager
                     throw new ArgumentException("Not a valid video surface");
 
                 _renderSurface = (VideoSurface)value;
-                PlayerInitialize();
+                PlayerInitialize(value);
             }
+        }
+
+        void PlayerInitialize(IVideoSurface value)
+        {
         }
 
         public VideoAspectMode AspectMode { get; set; }
 
-        public bool IsReadyRendering =>  RenderSurface != null && !RenderSurface.IsDisposed;
+        public bool IsReadyRendering => RenderSurface != null && !RenderSurface.IsDisposed;
 
         public bool IsMuted
         {
@@ -47,15 +52,15 @@ namespace Plugin.MediaManager
         protected override void PlayerInitialize()
         {
             Debug.WriteLine($"@@@@@@@@@ PlayerInitialize 1");
-            if (Player.State != PlayerState.Idle)
-            {
-                Debug.WriteLine($"@@@@@@@@@ PlayerInitialize 1.1 IF");
-                Player.Unprepare();
-            }
+            //if (Player.State != PlayerState.Idle)
+            //{
+            //    Debug.WriteLine($"@@@@@@@@@ PlayerInitialize 1.1 IF");
+            //    Player.Unprepare();
+            //}
 
             Debug.WriteLine($"@@@@@@@@@ PlayerInitialize 2");
 
-            if (RenderSurface is MediaView mediaView)
+            if (RenderSurface is VideoSurface surface)
             {
                 // On TV profile, it only works when the Display object type is 'Window'.
                 // When creating ElmSharp.MediaView object, if the parent is not set to Window, this would not work properly.
@@ -76,7 +81,8 @@ namespace Plugin.MediaManager
                 //}
                 //else
                 {
-                    Player.Display = new Display(mediaView);
+                    if (Player != null)
+                        Player.Display = new Display(surface.MediaView);
                     Debug.WriteLine($"@@@@@@@@@ PlayerInitialize mobile display set");
                 }
             }

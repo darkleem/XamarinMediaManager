@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Plugin.MediaManager.Abstractions;
 using Plugin.MediaManager.Abstractions.Implementations;
 
@@ -8,8 +9,8 @@ namespace Plugin.MediaManager
     /// </summary>
     public class MediaManagerImplementation : MediaManagerBase
     {
-        private IAudioPlayer _audioPlayer;
-        private IVideoPlayer _videoPlayer;
+        private IAudioPlayer _audioPlayer = null;
+        private IVideoPlayer _videoPlayer = null;
 
         public override IAudioPlayer AudioPlayer
         {
@@ -19,7 +20,11 @@ namespace Plugin.MediaManager
 
         public override IVideoPlayer VideoPlayer
         {
-            get { return _videoPlayer ?? (_videoPlayer = new VideoPlayerImplementation(VolumeManager)); }
+            get
+            {
+                Debug.WriteLine($"@@@@@@@@ VideoPlayer instance");
+                return _videoPlayer ?? (_videoPlayer = new VideoPlayerImplementation(VolumeManager));
+            }
             set { _videoPlayer = value; }
         }
 
